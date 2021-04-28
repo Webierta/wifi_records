@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:connectivity/connectivity.dart' show Connectivity, ConnectivityResult;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart';
 
 import '../models/red_wifi.dart';
 import '../models/redes.dart';
-import '../utils/location_service.dart';
 import '../utils/local_notification.dart';
+import '../utils/location_service.dart';
 
 // ver wifi_info_flutter: https://pub.dev/packages/wifi_info_flutter/example
 // https://stackoverflow.com/questions/62378654/flutter-connectivity-package-android-permissions
@@ -43,18 +43,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   _init() async {
-    bool locationService = await LocationService(context).gpsService();
+    var locationService = await LocationService(context).gpsService();
     if (locationService) {
       var result = await _connectivity.checkConnectivity();
       if (result == ConnectivityResult.wifi) {
         context.read<Redes>().connectivityWifi = true;
-        _updateConnectionStatus(result);
+        await _updateConnectionStatus(result);
       } else {
         context.read<Redes>().connectivityWifi = false;
-        localNotification?.cancelNotification();
+        await localNotification?.cancelNotification();
       }
     } else {
-      localNotification?.cancelNotification();
+      await localNotification?.cancelNotification();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Permiso de ubicación requerido.'),
       ));
@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: () => _init(),
+            onPressed: _init,
           ),
           IconButton(
             icon: const Icon(Icons.delete_forever),
@@ -191,7 +191,6 @@ class _HomePageState extends State<HomePage> {
                                 //RedWifi red = data.redes[index];
                                 return Dismissible(
                                   key: Key(data.redes[index].wifiBSSID),
-                                  //background: Container(color: Colors.redAccent),
                                   background: Container(
                                       decoration: const BoxDecoration(
                                         color: Color(0xFFECEFF1), //blueGrey[50] 0XFFCFD8DC = [100]

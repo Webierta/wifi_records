@@ -7,24 +7,24 @@ import 'red_wifi.dart';
 class Redes with ChangeNotifier {
   // Connection Status
   bool _connectivityWifi = false;
-  get connectivityWifi => _connectivityWifi;
-  set connectivityWifi(value) {
+  bool get connectivityWifi => _connectivityWifi;
+  set connectivityWifi(bool value) {
     _connectivityWifi = value;
     notifyListeners();
   }
 
   // Settings Android
   String _iconStatusBar = '@mipmap/wifi_star';
-  get iconStatusBar => _iconStatusBar;
-  set iconStatusBar(value) {
+  String get iconStatusBar => _iconStatusBar;
+  set iconStatusBar(String value) {
     _iconStatusBar = value;
     notifyListeners();
   }
 
   // obtiene y actualiza la lista de redes almacenadas
   static const _redesBox = 'box';
-  List _redesWifi = <RedWifi>[];
-  get redes => _redesWifi;
+  var _redesWifi = <RedWifi>[];
+  List<RedWifi> get redes => _redesWifi;
   getRedes() async {
     final box = await Hive.openBox<RedWifi>(_redesBox);
     _redesWifi = box.values.toList();
@@ -33,22 +33,22 @@ class Redes with ChangeNotifier {
 
   // getters y setters de valores de cada red
   String _wifiName = 'Unknown';
-  get wifiName => _wifiName;
-  set wifiName(value) {
+  String get wifiName => _wifiName;
+  set wifiName(String value) {
     _wifiName = value;
     notifyListeners();
   }
 
   String _wifiBSSID = 'Unknown';
-  get wifiBSSID => _wifiBSSID;
-  set wifiBSSID(value) {
+  String get wifiBSSID => _wifiBSSID;
+  set wifiBSSID(String value) {
     _wifiBSSID = value;
     notifyListeners();
   }
 
   String _wifiIp = 'Unknown';
-  get wifiIp => _wifiIp;
-  set wifiIp(value) {
+  String get wifiIp => _wifiIp;
+  set wifiIp(String value) {
     _wifiIp = value;
     notifyListeners();
   }
@@ -57,9 +57,8 @@ class Redes with ChangeNotifier {
   //  y después actualiza la lista de redes guardadas
   void saveRed(RedWifi red) async {
     if (!existeRed(red)) {
-      final box = Hive.box<RedWifi>(_redesBox);
       //var box = await Hive.openBox<RedWifi>(_redesBox);
-      box.put(red.wifiBSSID, red); //box.add(red);
+      await Hive.box<RedWifi>(_redesBox).put(red.wifiBSSID, red);
       getRedes();
       notifyListeners();
     }
@@ -77,23 +76,20 @@ class Redes with ChangeNotifier {
   }
 
   void removeRed(RedWifi red) {
-    final box = Hive.box<RedWifi>(_redesBox);
-    box.delete(red.wifiBSSID);
+    Hive.box<RedWifi>(_redesBox).delete(red.wifiBSSID);
     getRedes(); // ??
     notifyListeners();
   }
 
   updateRed(RedWifi red) {
-    final box = Hive.box<RedWifi>(_redesBox);
-    box.put(red.wifiBSSID, red); // box.put('key', newValue)
+    Hive.box<RedWifi>(_redesBox).put(red.wifiBSSID, red); // box.put('key', newValue)
     getRedes();
     notifyListeners();
   }
 
   // elimina el archivo del almacén
   deleteAll() {
-    final box = Hive.box<RedWifi>(_redesBox);
-    box.deleteFromDisk();
+    Hive.box<RedWifi>(_redesBox).deleteFromDisk();
     getRedes();
     notifyListeners();
   }

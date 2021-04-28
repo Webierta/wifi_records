@@ -26,7 +26,7 @@ class LocalNotification {
   void notification(String name, String msg) async {
     var android = AndroidNotificationDetails('id', 'channel ', 'description',
         enableLights: true, priority: Priority.high, importance: Importance.max);
-    var platform = new NotificationDetails(android: android);
+    var platform = NotificationDetails(android: android);
     await flutterLocalNotificationsPlugin.show(0, name, msg, platform,
         payload: 'Welcome to the Local Notification demo');
   }

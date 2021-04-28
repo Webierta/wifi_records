@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class LocationService {
-  final context;
+  final BuildContext context;
   LocationService(this.context);
 
   // Check if gps service is enabled or not
@@ -39,7 +39,7 @@ class LocationService {
   // https://dev.to/ahmedcharef/flutter-wait-user-enable-gps-permission-location-4po2
   // TODO: request location permiso
   Future _checkGps() async {
-    showDialog(
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return WillPopScope(
@@ -57,10 +57,9 @@ class LocationService {
                   }),
               TextButton(
                 child: const Text('Open'),
-                onPressed: () async {
+                onPressed: () {
                   Navigator.of(context).pop();
-                  final intent = AndroidIntent(action: 'android.settings.LOCATION_SOURCE_SETTINGS');
-                  intent.launch();
+                  AndroidIntent(action: 'android.settings.LOCATION_SOURCE_SETTINGS').launch();
                   SystemNavigator.pop();
                 },
               ),

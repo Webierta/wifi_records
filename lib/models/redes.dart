@@ -6,6 +6,13 @@ import 'red_wifi.dart';
 // https://medium.com/flutter-community/storing-local-data-with-hive-and-provider-in-flutter-a49b6bdea75a
 class Redes with ChangeNotifier {
   // Connection Status
+  bool _connectivityDone = false;
+  bool get connectivityDone => _connectivityDone;
+  set connectivityDone(bool value) {
+    _connectivityDone = value;
+    notifyListeners();
+  }
+
   bool _connectivityWifi = false;
   bool get connectivityWifi => _connectivityWifi;
   set connectivityWifi(bool value) {
@@ -56,7 +63,7 @@ class Redes with ChangeNotifier {
   //  acciones de guardar, eliminar y actualizar red en el almacén
   //  y después actualiza la lista de redes guardadas
   void saveRed(RedWifi red) async {
-    if (!existeRed(red)) {
+    if (!existeRed(red.wifiName, red.wifiBSSID)) {
       //var box = await Hive.openBox<RedWifi>(_redesBox);
       await Hive.box<RedWifi>(_redesBox).put(red.wifiBSSID, red);
       getRedes();
@@ -65,10 +72,10 @@ class Redes with ChangeNotifier {
   }
 
   // comprueba si una red está almacenada
-  bool existeRed(RedWifi newRed) {
+  bool existeRed(String name, String bssid) {
     getRedes();
     for (var red in _redesWifi) {
-      if (red.wifiName == newRed.wifiName && red.wifiBSSID == newRed.wifiBSSID) {
+      if (red.wifiName == name && red.wifiBSSID == bssid) {
         return true;
       }
     }

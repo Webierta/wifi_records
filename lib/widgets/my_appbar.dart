@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
 import '../models/redes.dart';
+import '../routes.dart';
 
 class Action {
   final String title;
@@ -32,25 +33,56 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _selectAction(Action action) {
+    Future<bool> _confirmDelete() async {
+      return (await showDialog<bool>(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext dialogContext) {
+              return AlertDialog(
+                title: const Text('Eliminar registros'),
+                content: const Text('Esta acción elimina todos los registros almacenados.'),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Cancelar'),
+                    onPressed: () => Navigator.of(dialogContext).pop(false),
+                  ),
+                  TextButton(
+                    child: const Text('Confirmar'),
+                    onPressed: () => Navigator.of(dialogContext).pop(true),
+                  ),
+                ],
+              );
+            },
+          )) ??
+          false;
+    }
+
+    Future<void> _selectAction(Action action) async {
       switch (action.title) {
         case titleInfo:
-          print('INFO');
+          await Navigator.of(context).pushNamed(RouteGenerator.info);
           break;
         case titleAbout:
-          print('ABOUT');
+          await Navigator.of(context).pushNamed(RouteGenerator.about);
           break;
         case titleDelete:
-          // TODO: dialogo de confirmar eliminar todas las redes ?
-          //TODO: no hacer nada si redes está vacía
-          context.read<Redes>().deleteAll();
-          init();
+          if (context.read<Redes>().isNotEmpty()) {
+            var confirmar = await _confirmDelete();
+            if (confirmar == true) {
+              context.read<Redes>().deleteAll();
+              init();
+            }
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Nada que eliminar.'),
+            ));
+          }
           break;
         case titleSalir:
-          SystemNavigator.pop();
+          await SystemNavigator.pop();
           break;
         default:
-          print('DEFAULT');
+          print('DEFAULT?');
           break;
       }
     }
@@ -70,13 +102,18 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             return actions.map((Action action) {
               return PopupMenuItem<Action>(
                 value: action,
-                child: Row(
-                  children: [
+                child: Column(children: [
+                  Row(children: [
                     Icon(action.icon),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text(action.title),
-                  ],
-                ),
+                  ]),
+                  if (actions.indexOf(action) == 1 || actions.indexOf(action) == 2)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child: PopupMenuDivider(height: 20),
+                    ),
+                ]),
               );
             }).toList();
           },

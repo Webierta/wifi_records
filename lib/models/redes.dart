@@ -100,4 +100,9 @@ class Redes with ChangeNotifier {
     getRedes();
     notifyListeners();
   }
+
+  bool isNotEmpty() {
+    getRedes();
+    return _redesWifi.isNotEmpty;
+  }
 }

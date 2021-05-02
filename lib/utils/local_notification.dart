@@ -24,6 +24,7 @@ class LocalNotification {
   }
 
   void notification(String name, String msg) async {
+    //TODO optimizar o personalizar
     var android = AndroidNotificationDetails('id', 'channel ', 'description',
         enableLights: true, priority: Priority.high, importance: Importance.max);
     var platform = NotificationDetails(android: android);

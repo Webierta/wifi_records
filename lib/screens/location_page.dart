@@ -16,7 +16,7 @@ import '../widgets/no_init.dart';
 // ver wifi_info_flutter: https://pub.dev/packages/wifi_info_flutter/example
 // https://stackoverflow.com/questions/62378654/flutter-connectivity-package-android-permissions
 class LocationPage extends StatefulWidget {
-  LocationPage({Key? key}) : super(key: key);
+  const LocationPage({Key? key}) : super(key: key);
 
   @override
   _LocationPageState createState() => _LocationPageState();

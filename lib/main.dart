@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'models/red_wifi.dart';
 import 'models/redes.dart';
-import 'screens/location_page.dart';
+import 'routes.dart';
 
 // Sets a platform override for desktop to avoid exceptions. See
 // https://flutter.dev/desktop#target-platform-override for more info.
@@ -41,8 +41,11 @@ class MyApp extends StatelessWidget {
         // primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.blueGrey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: TextTheme(bodyText2: TextStyle(fontSize: 16.0)),
       ),
-      home: LocationPage(),
+      //home: LocationPage(),
+      initialRoute: RouteGenerator.home,
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

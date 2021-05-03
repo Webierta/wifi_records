@@ -2,16 +2,28 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DonationPage extends StatelessWidget {
   const DonationPage();
 
   @override
   Widget build(BuildContext context) {
+    void _launchURL() async {
+      const _url = 'https://www.paypal.com/donate?hosted_button_id=986PSAHLH6N4L';
+      if (await canLaunch(_url)) {
+        await launch(_url);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Could not launch PayPal payment website.'),
+        ));
+      }
+    }
+
     return Scaffold(
-      appBar: AppBar(title: Text('Buy Me a Coffee')),
+      appBar: AppBar(title: const Text('Buy Me a Coffee')),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 40),
+        padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 40),
         child: Column(
           children: [
             FractionallySizedBox(
@@ -98,7 +110,8 @@ class DonationPage extends StatelessWidget {
                   elevation: 10.0,
                   padding: EdgeInsets.all(10),
                 ),
-                onPressed: () {},
+                //TODO ABRIR NAVEGADOR
+                onPressed: _launchURL,
                 child: Image.asset('assets/images/paypal_logo.png'),
               ),
             ),

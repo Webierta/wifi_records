@@ -39,7 +39,6 @@ class _LocationPageState extends State<LocationPage> {
 
   @override
   void dispose() {
-    print('dispose');
     _connectivityStream.cancel();
     super.dispose();
   }
@@ -80,17 +79,11 @@ class _LocationPageState extends State<LocationPage> {
 
   _init() async {
     var location = await Location.init();
-    print('INIT');
     if (!location.serviceEnabled) {
-      print('serviceEnabled != true');
       //TODO: posible retorno del valor pulsado y permitir tap back para regresar a la app
-      // Future<bool>
-      // return (await showDialog<bool>
-      //  onPressed: Navigator.of(context).pop(false);
       await _dialogoLocation();
     }
     if (location.serviceEnabled && location.permissionIsGranted) {
-      print('serviceEnabled == true && permissionIsGranted == true');
       var result = await _connectivity.checkConnectivity();
       //if (result != ConnectivityResult.none) {
       context.read<Redes>().connectivityDone = true;
@@ -151,7 +144,7 @@ class _LocationPageState extends State<LocationPage> {
   Widget build(BuildContext context) {
     context.watch<Redes>().getRedes();
     return Scaffold(
-      body: context.read<Redes>().connectivityDone == true ? Home(_init) : NotInit(),
+      body: context.read<Redes>().connectivityDone == true ? Home(_init) : const NotInit(),
     );
   }
 }

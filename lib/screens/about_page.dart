@@ -48,6 +48,7 @@ class AboutPage extends StatelessWidget {
 }
 
 const String textoAbout = '''
+
 WIFI RECORDS
 Versión 1.0.0
 Jesús Cuerda (Webierta)
@@ -98,5 +99,5 @@ RECONOCIMIENTOS Y DEPENDENCIAS
 
 Aplicación desarrollada con Flutter.
 
-Packages de Flutter y Dart: provider (MIT License, Remi Rousselet), wifi_info_flutter (BSD License, flutter.dev), connectivity (BSD License, flutter.dev), permission_handler (MIT License, Baseflow), android_intent (BSD License, flutter.dev), hive (Apache License, hivedb.dev), path_provider (BSD License, flutter.dev), flutter_local_notifications (BSD License, dexterx.dev).
+Packages de Flutter y Dart: provider (MIT License, Remi Rousselet), wifi_info_flutter (BSD License, flutter.dev), connectivity (BSD License, flutter.dev), permission_handler (MIT License, Baseflow), android_intent (BSD License, flutter.dev), hive (Apache License, hivedb.dev), path_provider (BSD License, flutter.dev), flutter_local_notifications (BSD License, dexterx.dev), url_launcher (BSD License, flutter.dev).
 ''';

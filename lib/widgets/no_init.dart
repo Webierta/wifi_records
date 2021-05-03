@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class NotInit extends StatelessWidget {
+  const NotInit();
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -9,16 +11,16 @@ class NotInit extends StatelessWidget {
           color: Colors.black.withOpacity(0.8),
           borderRadius: BorderRadius.circular(10),
         ),
-        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: EdgeInsets.only(bottom: 16),
-              child: CircularProgressIndicator(),
+              padding: const EdgeInsets.only(bottom: 16),
+              child: const CircularProgressIndicator(),
             ),
-            Text('Buscando conexion wifi...')
+            const Text('Buscando conexion wifi...')
           ],
         ),
       ),

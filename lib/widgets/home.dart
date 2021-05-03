@@ -12,6 +12,29 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.watch<Redes>().getRedes();
+
+    StatelessWidget _iconTrailing() {
+      if (context.read<Redes>().connectivityWifi) {
+        if (context
+            .read<Redes>()
+            .existeRed(context.read<Redes>().wifiName, context.read<Redes>().wifiBSSID)) {
+          return const Icon(Icons.lock, color: Colors.grey);
+        } else {
+          return IconButton(
+            icon: const Icon(Icons.save),
+            onPressed: () {
+              context.read<Redes>().saveRed(RedWifi(
+                  wifiName: context.read<Redes>().wifiName,
+                  wifiBSSID: context.read<Redes>().wifiBSSID));
+              init();
+            },
+          );
+        }
+      } else {
+        return const Icon(Icons.warning_amber_outlined, color: Colors.redAccent);
+      }
+    }
+
     return Scaffold(
       appBar: MyAppBar(appBar: AppBar(), init: init),
       body: WillPopScope(
@@ -30,54 +53,54 @@ class Home extends StatelessWidget {
                         : 'Wifi Status: Not available'),
                   ),
                 ),
-                if (context.read<Redes>().connectivityWifi)
-                  Card(
-                    margin: const EdgeInsets.only(bottom: 30.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.wifi, color: Colors.blue),
-                          title: Text(context.watch<Redes>().wifiName),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('BSSID: ${context.watch<Redes>().wifiBSSID}'),
-                              Text('IP: ${context.watch<Redes>().wifiIp}')
-                            ],
-                          ),
-                          trailing: (context.read<Redes>().existeRed(
-                                  context.read<Redes>().wifiName, context.read<Redes>().wifiBSSID))
-                              ? const Icon(Icons.lock)
-                              : IconButton(
-                                  icon: const Icon(Icons.save),
-                                  onPressed: () {
-                                    context.read<Redes>().saveRed(RedWifi(
-                                        wifiName: context.read<Redes>().wifiName,
-                                        wifiBSSID: context.read<Redes>().wifiBSSID));
-                                    init();
-                                  },
-                                ),
-                        ),
-                      ],
-                    ),
+                Card(
+                  //margin: const EdgeInsets.only(bottom: 30.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        leading: context.read<Redes>().connectivityWifi
+                            ? const Icon(Icons.wifi, color: Colors.blue)
+                            : const Icon(Icons.signal_wifi_off, color: Colors.grey),
+                        title: Text(context.read<Redes>().connectivityWifi
+                            ? context.watch<Redes>().wifiName
+                            : 'Not connected to wifi network'),
+                        subtitle: context.read<Redes>().connectivityWifi
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('BSSID: ${context.watch<Redes>().wifiBSSID}'),
+                                  Text('IP: ${context.watch<Redes>().wifiIp}')
+                                ],
+                              )
+                            : null,
+                        trailing: _iconTrailing(),
+                      ),
+                    ],
                   ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('Redes registradas:'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30, bottom: 15),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Redes registradas:'),
+                  ),
                 ),
                 (context.watch<Redes>().redes.length == 0)
-                    ? const Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text('Ninguna red wifi registrada.'),
-                        ),
+                    ? const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Ninguna red wifi registrada.'),
                       )
                     : Consumer<Redes>(
                         builder: (context, data, child) {
                           return Expanded(
-                            child: ListView.builder(
+                            child: ListView.separated(
+                              separatorBuilder: (context, index) => Divider(
+                                thickness: 0.5,
+                                color: Colors.grey,
+                                indent: 10,
+                                endIndent: 10,
+                              ),
                               itemCount: data.redes.length,
                               itemBuilder: (context, index) {
                                 //RedWifi red = data.redes[index];
@@ -85,7 +108,7 @@ class Home extends StatelessWidget {
                                   key: Key(data.redes[index].wifiBSSID),
                                   background: Container(
                                     decoration: const BoxDecoration(
-                                      color: Color(0xFFECEFF1), //blueGrey[50] 0XFFCFD8DC = [100]
+                                      color: Color(0xFFECEFF1),
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(40),
                                         bottomLeft: Radius.circular(40),

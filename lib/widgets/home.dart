@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../localization/app_localization.dart';
+import '../localization/loc_keys.dart';
 import '../models/red_wifi.dart';
 import '../models/redes.dart';
 import 'my_appbar.dart';
@@ -48,9 +50,12 @@ class Home extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(context.read<Redes>().connectivityWifi == true
-                        ? 'Wifi Status:  Connected'
-                        : 'Wifi Status: Not available'),
+                    child: Text(
+                      context.read<Redes>().connectivityWifi
+                          ? context.trans(LocKeys.wifiStatusOn)
+                          : context.trans(LocKeys.wifiStatusOff),
+                      //'Wifi Status: Not available'),
+                    ),
                   ),
                 ),
                 Card(
@@ -64,7 +69,7 @@ class Home extends StatelessWidget {
                             : const Icon(Icons.signal_wifi_off, color: Colors.grey),
                         title: Text(context.read<Redes>().connectivityWifi
                             ? context.watch<Redes>().wifiName
-                            : 'Not connected to wifi network'),
+                            : context.trans(LocKeys.noWifi)),
                         subtitle: context.read<Redes>().connectivityWifi
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,15 +86,15 @@ class Home extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 30, bottom: 15),
-                  child: const Align(
+                  child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Redes registradas:'),
+                    child: Text(context.trans(LocKeys.regNet)),
                   ),
                 ),
                 (context.watch<Redes>().redes.length == 0)
-                    ? const Align(
+                    ? Align(
                         alignment: Alignment.centerLeft,
-                        child: Text('Ninguna red wifi registrada.'),
+                        child: Text(context.trans(LocKeys.noRegNet)),
                       )
                     : Consumer<Redes>(
                         builder: (context, data, child) {
@@ -128,8 +133,12 @@ class Home extends StatelessWidget {
                                   ),
                                   direction: DismissDirection.startToEnd,
                                   onDismissed: (direction) {
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                        content: Text('${data.redes[index].wifiName} delete')));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            '${data.redes[index].wifiName} ${context.trans(LocKeys.delete)}'),
+                                      ),
+                                    );
                                     data.removeRed(data.redes[index]);
                                     init();
                                   },

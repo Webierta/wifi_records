@@ -1,27 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
-
+import '../localization/app_localization.dart';
+import '../localization/loc_keys.dart';
 import '../models/redes.dart';
 import '../routes.dart';
 
 class Action {
+  final int id;
   final String title;
   final IconData icon;
-  const Action({required this.title, required this.icon});
+  const Action({required this.id, required this.title, required this.icon});
 }
-
-const titleInfo = 'Info';
-const titleAbout = 'About';
-const titleDelete = 'Delete all';
-const titleSalir = 'Salir';
-
-const actions = <Action>[
-  Action(title: titleInfo, icon: Icons.info_outline),
-  Action(title: titleAbout, icon: Icons.code),
-  Action(title: titleDelete, icon: Icons.delete_forever),
-  Action(title: titleSalir, icon: Icons.exit_to_app_outlined),
-];
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppBar appBar;
@@ -33,21 +23,28 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    var actions = <Action>[
+      Action(id: 1, title: 'Info', icon: Icons.info_outline),
+      Action(id: 2, title: context.trans(LocKeys.about), icon: Icons.code),
+      Action(id: 3, title: context.trans(LocKeys.deleteAll), icon: Icons.delete_forever),
+      Action(id: 4, title: context.trans(LocKeys.exit), icon: Icons.exit_to_app_outlined),
+    ];
+
     Future<bool> _confirmDelete() async {
       return (await showDialog<bool>(
             context: context,
             barrierDismissible: false,
             builder: (BuildContext dialogContext) {
               return AlertDialog(
-                title: const Text('Eliminar registros'),
-                content: const Text('Esta acción elimina todos los registros almacenados.'),
+                title: Text(context.trans(LocKeys.deleteReg)),
+                content: Text(context.trans(LocKeys.actionDelete)),
                 actions: <Widget>[
                   TextButton(
-                    child: const Text('Cancelar'),
+                    child: Text(context.trans(LocKeys.cancel)),
                     onPressed: () => Navigator.of(dialogContext).pop(false),
                   ),
                   TextButton(
-                    child: const Text('Confirmar'),
+                    child: Text(context.trans(LocKeys.confirm)),
                     onPressed: () => Navigator.of(dialogContext).pop(true),
                   ),
                 ],
@@ -58,14 +55,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     Future<void> _selectAction(Action action) async {
-      switch (action.title) {
-        case titleInfo:
+      switch (action.id) {
+        case 1:
           await Navigator.of(context).pushNamed(RouteGenerator.info);
           break;
-        case titleAbout:
+        case 2:
           await Navigator.of(context).pushNamed(RouteGenerator.about);
           break;
-        case titleDelete:
+        case 3:
           if (context.read<Redes>().isNotEmpty()) {
             var confirmar = await _confirmDelete();
             if (confirmar == true) {
@@ -74,11 +71,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             }
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Nada que eliminar.'),
+              content: Text(context.trans(LocKeys.nothingRemove)),
             ));
           }
           break;
-        case titleSalir:
+        case 4:
           await SystemNavigator.pop();
           break;
         default:
@@ -86,6 +83,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           break;
       }
     }
+
+    //String _textAction() {}
 
     return AppBar(
       title: const Text('Wifi Records'),

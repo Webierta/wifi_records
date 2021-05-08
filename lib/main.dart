@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'localization/localization_delegate.dart';
 import 'models/red_wifi.dart';
 import 'models/redes.dart';
 import 'routes.dart';
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Wifi Alert',
+      title: 'Wifi Records',
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.lightBlue,
@@ -40,8 +42,16 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: RouteGenerator.home,
       onGenerateRoute: RouteGenerator.generateRoute,
+      localizationsDelegates: [
+        const AppLocalizationDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale.fromSubtags(languageCode: 'en'),
+        Locale.fromSubtags(languageCode: 'es'),
+      ],
     );
   }
 }
-
-//TODO: internacionalizacion : en es

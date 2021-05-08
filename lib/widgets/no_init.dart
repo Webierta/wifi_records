@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_localization.dart';
+import '../localization/loc_keys.dart';
+
 class NotInit extends StatelessWidget {
   const NotInit();
 
@@ -20,7 +23,7 @@ class NotInit extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 16),
               child: const CircularProgressIndicator(),
             ),
-            const Text('Buscando conexion wifi...')
+            Text(context.trans(LocKeys.searchWifi)),
           ],
         ),
       ),

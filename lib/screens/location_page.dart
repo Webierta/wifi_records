@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart';
 
+import '../localization/app_localization.dart';
+import '../localization/loc_keys.dart';
 import '../models/redes.dart';
 import '../utils/local_notification.dart';
 import '../utils/location_service.dart';
@@ -51,19 +53,17 @@ class _LocationPageState extends State<LocationPage> {
         return WillPopScope(
           onWillPop: () async => false,
           child: AlertDialog(
-            title: const Text('Location disabled'),
-            content: const Text('Enabled location service required.\n'
-                'Open Settings and enable Location.\n'
-                'Please then run the application again.'),
+            title: Text(context.trans(LocKeys.locDisabled)),
+            content: Text(context.trans(LocKeys.locRequired)),
             actions: <Widget>[
               TextButton(
-                  child: const Text('Close'),
+                  child: Text(context.trans(LocKeys.close)),
                   onPressed: () {
                     Navigator.of(context).pop();
                     SystemNavigator.pop();
                   }),
               TextButton(
-                child: const Text('Open Settings'),
+                child: Text(context.trans(LocKeys.openSettings)),
                 onPressed: () {
                   Navigator.of(context).pop();
                   AndroidIntent(action: 'android.settings.LOCATION_SOURCE_SETTINGS').launch();
@@ -95,21 +95,19 @@ class _LocationPageState extends State<LocationPage> {
         context.read<Redes>().connectivityWifi = false;
         await localNotification?.cancelNotification();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Conexión wifi no detectada.'),
+          content: Text(context.trans(LocKeys.wifiNotDetected)),
         ));
       }
     } else {
-      print('NO serviceEnabled == true && permissionIsGranted == true');
       await localNotification?.cancelNotification();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Permiso de ubicación requerido.'),
+        content: Text(context.trans(LocKeys.permitRequired)),
       ));
       context.read<Redes>().connectivityDone = false;
     }
   }
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    print('_updateConnectionStatus');
     String? _wName;
     String? _wBSSID;
     String? _wIp;
@@ -129,11 +127,11 @@ class _LocationPageState extends State<LocationPage> {
       if (context.read<Redes>().existeRed(_wName, _wBSSID)) {
         context.read<Redes>().iconStatusBar = '@mipmap/wifi_star';
         localNotification = LocalNotification(context.read<Redes>().iconStatusBar);
-        localNotification?.notification(_wName, 'Red registrada');
+        localNotification?.notification(_wName, context.trans(LocKeys.regNetWork));
       } else {
         context.read<Redes>().iconStatusBar = '@mipmap/wifi_alert';
         localNotification = LocalNotification(context.read<Redes>().iconStatusBar);
-        localNotification?.notification(_wName, 'Red no registrada');
+        localNotification?.notification(_wName, context.trans(LocKeys.regNotNetWork));
       }
     } else {
       context.read<Redes>().connectivityWifi = false;

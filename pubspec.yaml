@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   provider: ^5.0.0
   wifi_info_flutter: ^2.0.0
   connectivity: ^3.0.3

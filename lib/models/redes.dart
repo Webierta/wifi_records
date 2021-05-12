@@ -96,6 +96,7 @@ class Redes with ChangeNotifier {
 
   // elimina el archivo del almacén
   deleteAll() {
+    _redesWifi.clear();
     Hive.box<RedWifi>(_redesBox).deleteFromDisk();
     getRedes();
     notifyListeners();

@@ -110,7 +110,6 @@ class DonationPage extends StatelessWidget {
                   elevation: 10.0,
                   padding: EdgeInsets.all(10),
                 ),
-                //TODO ABRIR NAVEGADOR
                 onPressed: _launchURL,
                 child: Image.asset('assets/images/paypal_logo.png'),
               ),

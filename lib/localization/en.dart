@@ -17,10 +17,6 @@ WIFI RECORDS
 
 Simple app that alerts when the device connects to an unregistered Wi-Fi network while running in the background.
 
-The main notification appears as an icon in the status bar.
-
-Other secondary notifications appear in the form of a floating dialog, a sound, and a brief vibration. Normally, any device allows you to customize these secondary notifications to enable or disable them.
-
 To register a Wi-Fi network, connect to that network and click on the <Save> icon (if it does not appear, that network is already registered).
 
 To delete a registered network, swipe that network to the right of the screen (that does not disconnect you from that network).

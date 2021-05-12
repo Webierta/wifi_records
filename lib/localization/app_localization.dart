@@ -6,14 +6,11 @@ import 'loc_keys.dart';
 
 extension LocalizationExt on BuildContext {
   String trans(LocKeys value) {
-    // Getting the device's locale (en, es...)
     final code = AppLocalization.of(this)?.locale.languageCode ?? 'en';
     final database = AppLocalization._db;
-    // Checks whether the current app locale is supported
     if (database.containsKey(code)) {
       return database[code]?[value] ?? '-';
     } else {
-      // Default to English if the locale is not supported
       return database['en']?[value] ?? '-';
     }
   }

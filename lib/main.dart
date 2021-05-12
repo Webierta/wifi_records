@@ -11,8 +11,7 @@ import 'models/red_wifi.dart';
 import 'models/redes.dart';
 import 'routes.dart';
 
-// Sets a platform override for desktop to avoid exceptions. See
-// https://flutter.dev/desktop#target-platform-override for more info.
+// https://flutter.dev/desktop#target-platform-override
 void main() async {
   if (Platform.isAndroid) {
     WidgetsFlutterBinding.ensureInitialized();

@@ -6,8 +6,10 @@ import '../localization/loc_keys.dart';
 import '../models/redes.dart';
 import '../routes.dart';
 
+enum Item { info, about, deleteAll, exit }
+
 class Action {
-  final int id;
+  final Item id;
   final String title;
   final IconData icon;
   const Action({required this.id, required this.title, required this.icon});
@@ -24,10 +26,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     var actions = <Action>[
-      Action(id: 1, title: 'Info', icon: Icons.info_outline),
-      Action(id: 2, title: context.trans(LocKeys.about), icon: Icons.code),
-      Action(id: 3, title: context.trans(LocKeys.deleteAll), icon: Icons.delete_forever),
-      Action(id: 4, title: context.trans(LocKeys.exit), icon: Icons.exit_to_app_outlined),
+      Action(id: Item.info, title: 'Info', icon: Icons.info_outline),
+      Action(id: Item.about, title: context.trans(LocKeys.about), icon: Icons.code),
+      Action(
+          id: Item.deleteAll, title: context.trans(LocKeys.deleteAll), icon: Icons.delete_forever),
+      Action(id: Item.exit, title: context.trans(LocKeys.exit), icon: Icons.exit_to_app_outlined),
     ];
 
     Future<bool> _confirmDelete() async {
@@ -56,16 +59,16 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     Future<void> _selectAction(Action action) async {
       switch (action.id) {
-        case 1:
+        case Item.info:
           await Navigator.of(context).pushNamed(RouteGenerator.info);
           break;
-        case 2:
+        case Item.about:
           await Navigator.of(context).pushNamed(RouteGenerator.about);
           break;
-        case 3:
+        case Item.deleteAll:
           if (context.read<Redes>().isNotEmpty()) {
-            var confirmar = await _confirmDelete();
-            if (confirmar == true) {
+            var confirm = await _confirmDelete();
+            if (confirm == true) {
               context.read<Redes>().deleteAll();
               init();
             }
@@ -75,16 +78,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             ));
           }
           break;
-        case 4:
+        case Item.exit:
           await SystemNavigator.pop();
           break;
-        default:
+        /*default:
           print('DEFAULT?');
-          break;
+          break;*/
       }
     }
-
-    //String _textAction() {}
 
     return AppBar(
       title: const Text('Wifi Records'),

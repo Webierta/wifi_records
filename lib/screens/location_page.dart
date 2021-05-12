@@ -15,7 +15,7 @@ import '../utils/location_service.dart';
 import '../widgets/home.dart';
 import '../widgets/no_init.dart';
 
-// ver wifi_info_flutter: https://pub.dev/packages/wifi_info_flutter/example
+// https://pub.dev/packages/wifi_info_flutter/example
 // https://stackoverflow.com/questions/62378654/flutter-connectivity-package-android-permissions
 class LocationPage extends StatefulWidget {
   const LocationPage({Key? key}) : super(key: key);
@@ -42,6 +42,7 @@ class _LocationPageState extends State<LocationPage> {
   @override
   void dispose() {
     _connectivityStream.cancel();
+    localNotification?.cancelNotification();
     super.dispose();
   }
 
@@ -80,7 +81,6 @@ class _LocationPageState extends State<LocationPage> {
   _init() async {
     var location = await Location.init();
     if (!location.serviceEnabled) {
-      //TODO: posible retorno del valor pulsado y permitir tap back para regresar a la app
       await _dialogoLocation();
     }
     if (location.serviceEnabled && location.permissionIsGranted) {
@@ -123,15 +123,16 @@ class _LocationPageState extends State<LocationPage> {
       context.read<Redes>().wifiName = _wName;
       context.read<Redes>().wifiBSSID = _wBSSID;
       context.read<Redes>().wifiIp = _wIp;
-      //if (_checkExiste(_wName, _wBSSID)) {
       if (context.read<Redes>().existeRed(_wName, _wBSSID)) {
         context.read<Redes>().iconStatusBar = '@mipmap/wifi_star';
         localNotification = LocalNotification(context.read<Redes>().iconStatusBar);
-        localNotification?.notification(_wName, context.trans(LocKeys.regNetWork));
+        localNotification?.notification(
+            title: _wName, msg: context.trans(LocKeys.regNetWork), sound: false);
       } else {
         context.read<Redes>().iconStatusBar = '@mipmap/wifi_alert';
         localNotification = LocalNotification(context.read<Redes>().iconStatusBar);
-        localNotification?.notification(_wName, context.trans(LocKeys.regNotNetWork));
+        localNotification?.notification(
+            title: _wName, msg: context.trans(LocKeys.regNotNetWork), sound: true);
       }
     } else {
       context.read<Redes>().connectivityWifi = false;

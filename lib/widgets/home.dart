@@ -59,7 +59,6 @@ class Home extends StatelessWidget {
                   ),
                 ),
                 Card(
-                  //margin: const EdgeInsets.only(bottom: 30.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -74,8 +73,12 @@ class Home extends StatelessWidget {
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('BSSID: ${context.watch<Redes>().wifiBSSID}'),
-                                  Text('IP: ${context.watch<Redes>().wifiIp}')
+                                  FittedBox(
+                                      fit: BoxFit.fitWidth,
+                                      child: Text('BSSID: ${context.watch<Redes>().wifiBSSID}')),
+                                  FittedBox(
+                                      fit: BoxFit.fitWidth,
+                                      child: Text('IP: ${context.watch<Redes>().wifiIp}'))
                                 ],
                               )
                             : null,
@@ -140,7 +143,10 @@ class Home extends StatelessWidget {
                                       ),
                                     );
                                     data.removeRed(data.redes[index]);
-                                    init();
+                                    if (data.redes[index].wifiBSSID ==
+                                        context.read<Redes>().wifiBSSID) {
+                                      init(); // solo si es la red conectada
+                                    }
                                   },
                                   child: ListTile(
                                     leading: const Icon(Icons.wifi_lock),

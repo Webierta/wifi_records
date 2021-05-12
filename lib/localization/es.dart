@@ -17,10 +17,6 @@ WIFI RECORDS
 
 Aplicación simple que alerta cuando el dispositivo se conecta a una red Wi-Fi no registrada mientras se ejecuta en segundo plano.
 
-La notificación principal aparece como un icono en la barra de estado.
-
-Otras notificaciones secundarias aparecen en forma de un cuadro de diálogo flotante, un sonido y una breve vibración. Normalmente cualquier dispositivo permite personalizar estas notificaciones secundarias para habilitarlas o desactivarlas.
-
 Para registrar una red wifi, conéctate a esa red y pulsa sobre el icono de <Guardar> (si no aparece es que esa red ya está registrada).
 
 Para eliminar una red registrada, desliza esa red hacia la derecha de la pantalla (eso no te desconecta a esa red).
@@ -33,7 +29,7 @@ Para eliminar una red registrada, desliza esa red hacia la derecha de la pantall
   LocKeys.wifiNotDetected: 'Conexión Wifi no detectada.',
   LocKeys.permitRequired: 'Requerido permiso de Ubicación.',
   LocKeys.regNetWork: 'Red registrada',
-  LocKeys.regNotNetWork: 'Red registrada',
+  LocKeys.regNotNetWork: 'Red no registrada',
   LocKeys.textoDonativo: '''
 Wifi Records es software libre de código abierto que ofrece una aplicación gratuita y sin publicidad.
 
